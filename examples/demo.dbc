@@ -1,0 +1,48 @@
+VERSION ""
+
+NS_ :
+
+BS_:
+
+BU_: ECU TESTER BMS
+
+BO_ 256 EngineData: 8 ECU
+ SG_ EngineSpeed : 0|16@1+ (0.25,0) [0|8000] "rpm" TESTER
+ SG_ CoolantTemp : 16|8@1+ (1,-40) [-40|150] "degC" TESTER
+ SG_ Throttle : 24|8@1+ (0.4,0) [0|100] "%" TESTER
+ SG_ EngineRunning : 32|1@1+ (1,0) [0|1] "" TESTER
+
+BO_ 512 VehicleSpeed: 8 ECU
+ SG_ Speed : 0|16@1+ (0.01,0) [0|250] "km/h" TESTER
+ SG_ Gear : 16|4@1+ (1,0) [0|7] "" TESTER
+ SG_ BrakePressed : 20|1@1+ (1,0) [0|1] "" TESTER
+ SG_ SteeringAngle : 24|16@1- (0.1,0) [-780|780] "deg" TESTER
+
+BO_ 2566852640 BatteryStatus: 8 BMS
+ SG_ Voltage : 0|16@1+ (0.01,0) [0|600] "V" TESTER
+ SG_ Current : 16|16@1- (0.1,0) [-500|500] "A" TESTER
+ SG_ SOC : 32|8@1+ (0.5,0) [0|100] "%" TESTER
+
+BO_ 768 DiagMux: 8 ECU
+ SG_ MuxId M : 0|8@1+ (1,0) [0|1] "" TESTER
+ SG_ OilPressure m0 : 8|16@1+ (0.01,0) [0|10] "bar" TESTER
+ SG_ AmbientTemp m1 : 8|8@1+ (1,-40) [-40|85] "degC" TESTER
+
+BO_ 1024 TesterCommand: 8 TESTER
+ SG_ FanRequest : 0|8@1+ (1,0) [0|100] "%" ECU
+ SG_ Mode : 8|2@1+ (1,0) [0|3] "" ECU
+ SG_ TargetSpeed : 16|16@1+ (0.1,0) [0|250] "km/h" ECU
+
+CM_ SG_ 256 EngineSpeed "Crankshaft speed";
+CM_ SG_ 512 SteeringAngle "Positive = left";
+
+BA_DEF_ BO_ "GenMsgCycleTime" INT 0 10000;
+BA_DEF_DEF_ "GenMsgCycleTime" 100;
+BA_ "GenMsgCycleTime" BO_ 256 10;
+BA_ "GenMsgCycleTime" BO_ 512 20;
+BA_ "GenMsgCycleTime" BO_ 2566852640 100;
+BA_ "GenMsgCycleTime" BO_ 768 50;
+BA_ "GenMsgCycleTime" BO_ 1024 100;
+
+VAL_ 512 Gear 0 "P" 1 "R" 2 "N" 3 "D" 4 "S" ;
+VAL_ 1024 Mode 0 "Off" 1 "Eco" 2 "Normal" 3 "Sport" ;
